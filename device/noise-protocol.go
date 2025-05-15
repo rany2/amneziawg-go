@@ -119,11 +119,11 @@ type MessageCookieReply struct {
 	Cookie   [blake2s.Size128 + poly1305.TagSize]byte
 }
 
-var errMessageTooShort = errors.New("message too short")
+var errMessageLengthMismatch = errors.New("message length mismatch")
 
 func (msg *MessageInitiation) unmarshal(b []byte) error {
-	if len(b) < MessageInitiationSize {
-		return errMessageTooShort
+	if len(b) != MessageInitiationSize {
+		return errMessageLengthMismatch
 	}
 
 	msg.Type = binary.LittleEndian.Uint32(b)
@@ -138,8 +138,8 @@ func (msg *MessageInitiation) unmarshal(b []byte) error {
 }
 
 func (msg *MessageResponse) unmarshal(b []byte) error {
-	if len(b) < MessageResponseSize {
-		return errMessageTooShort
+	if len(b) != MessageResponseSize {
+		return errMessageLengthMismatch
 	}
 
 	msg.Type = binary.LittleEndian.Uint32(b)
@@ -154,8 +154,8 @@ func (msg *MessageResponse) unmarshal(b []byte) error {
 }
 
 func (msg *MessageCookieReply) unmarshal(b []byte) error {
-	if len(b) < MessageCookieReplySize {
-		return errMessageTooShort
+	if len(b) != MessageCookieReplySize {
+		return errMessageLengthMismatch
 	}
 
 	msg.Type = binary.LittleEndian.Uint32(b)
